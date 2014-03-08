@@ -22,8 +22,9 @@ namespace MongoMembership.Web.Controllers
             ViewBag.userTimeZone = user.user_timezone.ToString();
 
             TBL_USER_MANAGEMENTservices _managementServices = new TBL_USER_MANAGEMENTservices();
-            ViewData["managelist"] = _managementServices.GetUserManagements(User.Identity.Name);  
-            return View();
+            List<string> list = _managementServices.GetUserManagements(User.Identity.Name);
+            //System.Diagnostics.Debug.Write("list count: " + list.Count + "/n");
+            return View(list);
         }
 
     }

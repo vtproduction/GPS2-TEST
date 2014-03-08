@@ -1,0 +1,22 @@
+﻿@using MongoMembership.Entities
+@model List<string>
+@{
+    ViewBag.Title = "Index";
+    
+}
+
+<div class="row">
+    <div class="span4">
+        <h2>manage sub-user</h2>
+        <ul>
+           @foreach (var item in Model)
+           {
+                <li>@item</li>    
+           } 
+        </ul>
+    </div>
+
+    <div class="span8">
+        
+    </div>
+</div>
