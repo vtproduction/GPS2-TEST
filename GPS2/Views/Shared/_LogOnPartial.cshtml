@@ -1,0 +1,15 @@
+﻿@if (Request.IsAuthenticated)
+{
+    <ul class="nav">
+        <li>
+            @Html.ActionLink("Welcome, " + User.Identity.Name, "changepassword","Account")
+        </li>
+        <li>
+            @Html.ActionLink("Signout", "LogOff", "Account")
+        </li>
+        <li>
+            <a href="#">Timezone: @ViewBag.userTimeZone</a>
+        </li>
+    </ul>
+}
+
