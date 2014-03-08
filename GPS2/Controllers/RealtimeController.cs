@@ -20,6 +20,9 @@ namespace MongoMembership.Web.Controllers
             TBL_USERSservices _services = new TBL_USERSservices();
             TBL_USERS user = _services.GetUserByUsername(User.Identity.Name);
             ViewBag.userTimeZone = user.user_timezone.ToString();
+
+            TBL_USER_MANAGEMENTservices _managementServices = new TBL_USER_MANAGEMENTservices();
+            ViewData["managelist"] = _managementServices.GetUserManagements(User.Identity.Name);  
             return View();
         }
 

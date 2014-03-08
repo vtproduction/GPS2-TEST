@@ -41,16 +41,16 @@ namespace MongoMembership.Services
             return _userMangement.Collection.FindAll().SetSortOrder(SortBy.Descending("manage_row_id")).ToList();
         }
 
-        public IList<TBL_USERS> GetUserManagements(ObjectId managerId)
+        public List<string> GetUserManagements(string ownerName)
         {
             TBL_USERSservices userServices = new TBL_USERSservices();
-            var userManagement = _userMangement.Collection.Find(Query.EQ("_id", managerId)).SingleOrDefault();
-            var res = _userMangement.Collection.AsQueryable<TBL_USERS>()
-                       .Where (c => c._id == userManagement.manager_row_id) 
+            TBL_USERS owner = userServices.GetUserByUsername(ownerName);
+            var res = _userMangement.Collection.AsQueryable<TBL_USER_MANAGEMENT>()
+                       .Where (c => c.manager_row_id == owner._id) 
                        .Select(c => c);
-            IList<TBL_USERS> list = new List<TBL_USERS>();
+            List<string> list = new List<string>();
             foreach(var item in res){
-                list.Add(userServices.GetUser(item._id));
+                list.Add(userServices.GetUser(item.user_row_id).user_name);
             }
             return list;
         }
