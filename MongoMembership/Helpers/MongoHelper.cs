@@ -19,7 +19,7 @@ namespace MongoMembership.Helpers
             var client = new MongoClient(connectionString);
             var server = client.GetServer();
             var database = server.GetDatabase("GPS2");
-            Collection = database.GetCollection<T>("TBL_USERS");
+            Collection = database.GetCollection<T>(typeof(T).Name);
 
         }
     }

@@ -25,9 +25,10 @@ namespace MongoMembership.Services
             _userMangement = new MongoHelper<TBL_USER_MANAGEMENT>();
         }
 
-        public void Create(TBL_USER_MANAGEMENT TBL_USER_MANAGEMENT)
+        public void Create(TBL_USER_MANAGEMENT userManagement)
         {
-            _userMangement.Collection.Save(TBL_USER_MANAGEMENT);
+            
+            _userMangement.Collection.Save(userManagement);
         }
 
 
@@ -45,13 +46,22 @@ namespace MongoMembership.Services
         {
             TBL_USERSservices userServices = new TBL_USERSservices();
             TBL_USERS owner = userServices.GetUserByUsername(ownerName);
-            var res = _userMangement.Collection.AsQueryable<TBL_USER_MANAGEMENT>()
+            System.Diagnostics.Debug.Write("-------------ownername: " + owner._id + "-------------------\n");
+            var res =  _userMangement.Collection.AsQueryable<TBL_USER_MANAGEMENT>()
                        .Where (c => c.manager_row_id == owner._id) 
                        .Select(c => c);
             List<string> list = new List<string>();
-            foreach(var item in res){
-                list.Add(userServices.GetUser(item.user_row_id).user_name);
+            foreach (var item in res)
+            {
+                //list.Add();
+                //TBL_USERS user = userServices.GetUser(item.user_row_id);
+                //System.Diagnostics.Debug.Write("-------------username: " + user.user_name + "----" + item.user_row_id + "-------------------\n");
             }
+
+            TBL_USERS user = userServices.GetUser(owner._id);
+            System.Diagnostics.Debug.Write("-------------username: " + user.user_name + "-----------------------\n");
+
+
             return list;
         }
 

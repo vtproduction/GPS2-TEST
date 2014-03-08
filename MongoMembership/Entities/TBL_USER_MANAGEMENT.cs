@@ -12,5 +12,11 @@ namespace MongoMembership.Entities
         public ObjectId _id { get; set; }
         public ObjectId manager_row_id { get; set; }
         public ObjectId user_row_id { get; set; }
+
+        public TBL_USER_MANAGEMENT(ObjectId manager_row_id, ObjectId user_row_id)
+        {
+            this.manager_row_id = manager_row_id;
+            this.user_row_id = user_row_id;
+        }
     }
 }
