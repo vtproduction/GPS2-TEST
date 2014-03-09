@@ -42,24 +42,36 @@ namespace MongoMembership.Services
             return _userMangement.Collection.FindAll().SetSortOrder(SortBy.Descending("manage_row_id")).ToList();
         }
 
+        public List<TBL_USER_MANAGEMENT> GetUsersUnderManagement(ObjectId ownerId)
+        {
+            return _userMangement.Collection.Find(Query.EQ("manager_row_id", ownerId)).ToList();
+        }
         public List<string> GetUserManagements(string ownerName)
         {
             TBL_USERSservices userServices = new TBL_USERSservices();
             TBL_USERS owner = userServices.GetUserByUsername(ownerName);
-            System.Diagnostics.Debug.Write("-------------ownername: " + owner._id + "-------------------\n");
-            var res =  _userMangement.Collection.AsQueryable<TBL_USER_MANAGEMENT>()
-                       .Where (c => c.manager_row_id == owner._id) 
-                       .Select(c => c);
+            //var res =  _userMangement.Collection.AsQueryable<TBL_USER_MANAGEMENT>()
+            //           .Where (c => c.manager_row_id == owner._id) 
+            //           .Select(c => c);
+            List<TBL_USER_MANAGEMENT> res = GetUsersUnderManagement(owner._id);
+            TBL_USER_MANAGEMENT item = res[0];
             List<string> list = new List<string>();
-            foreach (var item in res)
-            {
-                //list.Add();
-                //TBL_USERS user = userServices.GetUser(item.user_row_id);
-                //System.Diagnostics.Debug.Write("-------------username: " + user.user_name + "----" + item.user_row_id + "-------------------\n");
-            }
+            
+            list.Add("owner: " + owner.user_name + " count: " + res.Count);
+            list.Add(userServices.GetUser(item.user_row_id).user_name);
+            //foreach (var item in res)
+            //{
+            //    //ObjectId userId = item.user_row_id;
+            //    //TBL_USERS user = userServices.GetUser(userId);
+            //    //string name = user.user_name;
+            //    list.Add(userServices.GetUser(item.user_row_id).user_name);
+            //    //list.Add(item._id + " \n " + item.manager_row_id + "\n " + item.user_row_id);
+            //    //TBL_USERS user = userServices.GetUser(item.user_row_id);
+            //    //System.Diagnostics.Debug.Write("-------------username: " + user.user_name + "----" + item.user_row_id + "-------------------\n");
+            //}
 
-            TBL_USERS user = userServices.GetUser(owner._id);
-            System.Diagnostics.Debug.Write("-------------username: " + user.user_name + "-----------------------\n");
+            //TBL_USERS user = userServices.GetUser(owner._id);
+            //System.Diagnostics.Debug.Write("-------------username: " + user.user_name + "-----------------------\n");
 
 
             return list;
