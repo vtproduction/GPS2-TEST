@@ -52,7 +52,12 @@ namespace MongoMembership.Services
         public TBL_USERS GetUser(ObjectId id)
         {
             var user = _users.Collection.Find(Query.EQ("_id", id)).SingleOrDefault();
-            //TBL_USERS.Comments = TBL_USERS.Comments.OrderByDescending(c => c.Date).ToList();
+            return user;
+        }
+
+        public TBL_USERS GetUserByObjectIdAsString(string id)
+        {
+            TBL_USERS user = _users.Collection.FindOne(Query.EQ("_id", ObjectId.Parse(id)));
             return user;
         }
 

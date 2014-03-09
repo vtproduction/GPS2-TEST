@@ -37,6 +37,11 @@ namespace MongoMembership.Services
             _userMangement.Collection.Remove(Query.EQ("_id", id));
         }
 
+        public List<ObjectId> getUsersListUnderManagement(ObjectId ownerId)
+        {
+            TBL_USER_MANAGEMENT list = _userMangement.Collection.FindOne(Query.EQ("manager_row_id", ownerId));
+            return list.user_row_id;
+        }
         public IList<TBL_USER_MANAGEMENT> GetUserManagements()
         {
             return _userMangement.Collection.FindAll().SetSortOrder(SortBy.Descending("manage_row_id")).ToList();
@@ -58,7 +63,27 @@ namespace MongoMembership.Services
             List<string> list = new List<string>();
             
             list.Add("owner: " + owner.user_name + " count: " + res.Count);
-            list.Add(userServices.GetUser(item.user_row_id).user_name);
+            List<ObjectId> llist = getUsersListUnderManagement(owner._id);
+
+            if (list.Count > 0)
+            {
+                foreach (var llistItem in llist)
+                {
+                    list.Add(llistItem.ToString());
+                    if (userServices.GetUserByObjectIdAsString(llistItem.ToString()) != null)
+                    {
+                        list.Add(userServices.GetUserByObjectIdAsString(llistItem.ToString()).user_name);
+                    }
+                    else
+                    {
+                        list.Add("=====");
+                    }
+                    //TBL_USERS user = userServices.GetUser(owner._id);
+                    //list.Add(user.user_name);
+                }
+            }
+
+            //list.Add(userServices.GetUser(item.user_row_id).user_name);
             //foreach (var item in res)
             //{
             //    //ObjectId userId = item.user_row_id;
